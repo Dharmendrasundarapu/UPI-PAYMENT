@@ -1,9 +1,9 @@
 package example.micronaut.gorm.domain
-
 import grails.gorm.annotation.Entity
 
 @Entity
 class AccountManagement {
+
     String bankName
     BigDecimal accountNumber
     int pin
@@ -11,19 +11,16 @@ class AccountManagement {
     int upiPin
     BigDecimal transactionLimit = 100
 
-    static belongsTo = [user:UserManagement]
+    static belongsTo = [user: UserManagement]
 
     static mapping = {
         id generator: 'increment'
-        accountNumber column: "accNum"
+        accountNumber column: 'accNum'
     }
 
     static constraints = {
-        accountNumber nullable: false
+        accountNumber nullable: false, unique: true
         pin unique: true
-        accountNumber unique: true
         transactionLimit min: 0.0
     }
-
-
 }

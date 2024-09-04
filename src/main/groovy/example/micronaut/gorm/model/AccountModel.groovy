@@ -3,41 +3,45 @@ package example.micronaut.gorm.model
 import example.micronaut.gorm.domain.AccountManagement
 import example.micronaut.gorm.domain.UserManagement
 
+
+
 class AccountModel {
+
     Long id
     UserManagement userManagement
     String bankName
     Long userId
     BigDecimal accountNumber
-    int  pin
+    int pin
     BigDecimal bankBalance = 100000
     int upiPin
-    Long transactionLimit = 100
-    static  AccountModel fromAccountManagement(AccountManagement accountManagement)
-    {
-        if(accountManagement==null)
-        {
-            return  null
+    BigDecimal transactionLimit = 100
+
+    static AccountModel fromAccountManagement(AccountManagement accountManagement) {
+        if (accountManagement == null) {
+            return null
         }
-        return  new AccountModel(
-                bankBalance: accountManagement.bankBalance
+        return new AccountModel(
+                bankName: accountManagement.bankName,
+                accountNumber: accountManagement.accountNumber,
+                pin: accountManagement.pin,
+                bankBalance: accountManagement.bankBalance,
+                upiPin: accountManagement.upiPin,
+                transactionLimit: accountManagement.transactionLimit
         )
     }
 
-    static  AccountManagement toAccount(AccountModel  accountModel)
-    {
-        if(accountModel==null)
-        {
+    static AccountManagement toAccount(AccountModel accountModel) {
+        if (accountModel == null) {
             return null
         }
-        AccountManagement accountManagement=new  AccountManagement()
-        accountManagement.bankName=accountModel.bankName
-        accountManagement.accountNumber=accountModel.accountNumber
-        accountManagement.pin=accountModel.pin
-        accountManagement.bankBalance=accountModel.bankBalance
-        accountManagement.upiPin=accountModel.upiPin
-        accountManagement.transactionLimit=accountModel.transactionLimit
-
+        AccountManagement accountManagement = new AccountManagement()
+        accountManagement.bankName = accountModel.bankName
+        accountManagement.accountNumber = accountModel.accountNumber
+        accountManagement.pin = accountModel.pin
+        accountManagement.bankBalance = accountModel.bankBalance
+        accountManagement.upiPin = accountModel.upiPin
+        accountManagement.transactionLimit = accountModel.transactionLimit
         return accountManagement
     }
 }

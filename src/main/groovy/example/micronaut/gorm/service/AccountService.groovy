@@ -17,26 +17,21 @@ class AccountService {
         return accountManagement
 
     }
+
     @Transactional
-    def getByUserId(Long userId)
-    {
-        UserManagement userManagement=UserManagement.findById(userId)
-        if(userManagement==null)
-        {
+    def getByUserId(Long userId) {
+        UserManagement userManagement = UserManagement.findById(userId)
+        if (userManagement == null) {
             return null
         }
 
-        def accountDetails=AccountManagement.findAllByUser(userManagement)
-        def userDetails=accountDetails.collect{userDetail->
+        def accountDetails = AccountManagement.findAllByUser(userManagement)
+        def userDetails = accountDetails.collect { userDetail ->
             AccountModel.fromAccountManagement(userDetail)
-//        accountDetails.each {userDetail->
-//            AccountModel accountModel=AccountModel.fromAccountManagement(userDetail)
-//            userDetails.add(accountModel)
-       }
+        }
 
-        return  userDetails
-
-
+        return userDetails
     }
 
-    }
+
+}
