@@ -16,6 +16,7 @@ class AccountModel {
     BigDecimal bankBalance = 100000
     int upiPin
     BigDecimal transactionLimit = 100
+    Boolean isPrimary=false
 
     static AccountModel fromAccountManagement(AccountManagement accountManagement) {
         if (accountManagement == null) {

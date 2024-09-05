@@ -6,42 +6,58 @@ import example.micronaut.gorm.domain.UserManagement
 import example.micronaut.gorm.model.TransactionModel
 import grails.gorm.transactions.Transactional
 
+import javax.inject.Inject
 import javax.inject.Singleton
 import java.text.SimpleDateFormat
 
 @Singleton
 class TransactionService {
+
+    // Inject the AccountService
+    @Inject
+    AccountService accountService
+
     @Transactional
-    def transferMoney(String senderMobileNumber, String receiverMobileNumber, BigDecimal amount, String upiPin)
-    {
+    def transferMoney(String senderMobileNumber, String receiverMobileNumber, BigDecimal amount, String upiPin) {
         UserManagement sender = UserManagement.findByPhoneNumber(senderMobileNumber)
         UserManagement receiver = UserManagement.findByPhoneNumber(receiverMobileNumber)
 
         if (!sender || !receiver) {
-            return "Sender or Receiver NotFound"
+            return "Sender or Receiver Not Found"
         }
-        AccountManagement senderAccount = AccountManagement.findByUserAndUpiPin(sender, upiPin)
+
+        // Fetch sender's account using UPI Pin via AccountService
+        AccountManagement senderAccount = accountService.findByUserAndUpiPin(sender, upiPin)
         if (!senderAccount) {
             return "Invalid UPI Pin"
         }
 
-        AccountManagement receiverAccount = AccountManagement.findByUser(receiver)
+        // Fetch receiver's primary account, or fallback to the default account
+        AccountManagement receiverAccount = accountService.findPrimaryAccount(receiver)
+        if (!receiverAccount) {
+            receiverAccount = accountService.findByUser(receiver)?.first()
+        }
 
         if (!receiverAccount) {
-            return "Receiver Not Found"
+            return "Receiver Account Not Found"
         }
+
+        // Check for sufficient balance
         if (senderAccount.bankBalance < amount) {
             return "Insufficient Balance"
         }
 
         def transaction
         try {
-            senderAccount.bankBalance = senderAccount.bankBalance - amount
-            senderAccount.save()
+            // Deduct amount from sender's account
+            senderAccount.bankBalance -= amount
+            senderAccount.save(flush: true)
 
-            receiverAccount.bankBalance = receiverAccount.bankBalance + amount
-            receiverAccount.save()
+            // Add amount to receiver's account
+            receiverAccount.bankBalance += amount
+            receiverAccount.save(flush: true)
 
+            // Create transaction record
             transaction = new TransactionManagement(
                     sender: sender,
                     receiver: receiver,
@@ -52,12 +68,14 @@ class TransactionService {
                     status: 'Completed',
                     transactionId: UUID.randomUUID().toString()
             )
-            transaction.save()
+            transaction.save(flush: true)
         } catch (Exception e) {
             transaction?.status = 'Failed'
-            transaction?.save()
+            transaction?.save(flush: true)
             throw e
         }
+
+        // Return transaction details
         return new TransactionModel(
                 transactionId: transaction.transactionId,
                 amount: transaction.amount,
@@ -67,6 +85,11 @@ class TransactionService {
                 status: transaction.status
         )
     }
+
+
+
+
+
     @Transactional
     def getTransactionHistory(Long phoneNumber) {
         def transactions = TransactionManagement.createCriteria().list {
