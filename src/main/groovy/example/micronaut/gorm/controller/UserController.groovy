@@ -30,8 +30,8 @@ class UserController {
     @Post("/login")
     def userDetails(@Body UserModel userModel)
     {
-        userService.getDetails(userModel.phoneNumber,userModel.password)
-        return "Log in Successful"
+        return  userService.getDetails(userModel.phoneNumber,userModel.password)
+
     }
     @Put("/{id}")
     def userupdate(@PathVariable Long id,@Body UserModel userModel)

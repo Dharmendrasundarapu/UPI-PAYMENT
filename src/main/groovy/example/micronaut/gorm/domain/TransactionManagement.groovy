@@ -9,6 +9,7 @@ class TransactionManagement {
     Date transactionDate
     String status
     String transactionId
+    Boolean isPrimary=false
 
     // Define explicit fields for sender and sourceAccount
     UserManagement sender

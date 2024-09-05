@@ -1,6 +1,6 @@
 package example.micronaut.gorm.model
 
-
+import example.micronaut.gorm.domain.AccountManagement
 import example.micronaut.gorm.domain.UserManagement
 
 class UserModel {
@@ -11,6 +11,7 @@ class UserModel {
     Long phoneNumber
     String email
     String password
+    List<AccountManagement> accounts
     static  UserModel fromUserDomain(UserManagement userDomain)
     {
         if (userDomain==null)
@@ -23,7 +24,8 @@ class UserModel {
                 lastName: userDomain.lastName,
                 address: userDomain.address,
                 phoneNumber: userDomain.phoneNumber,
-                email: userDomain.email
+                email: userDomain.email,
+                accounts: userDomain.accounts.collect {AccountModel.fromAccountManagement(it)}
         )
     }
 
