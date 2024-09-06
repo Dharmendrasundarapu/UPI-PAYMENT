@@ -29,7 +29,7 @@ class AccountService {
         AccountManagement accountManagement = accountModel.toAccount(accountModel)
         UserManagement user = UserManagement.get(accountModel.userId)
         if (!user) {
-            throw new IllegalArgumentException("User not found")
+            return  ("User not found")
         }
         accountManagement.user = user
 

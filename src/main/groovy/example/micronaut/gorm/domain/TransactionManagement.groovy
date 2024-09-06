@@ -18,6 +18,9 @@ class TransactionManagement {
     UserManagement receiver
     AccountManagement destinationAccount
 
+    static belongsTo = [sender:UserManagement,receiver:UserManagement]
+    static hasMany = [sourceAccount:AccountManagement,destinationAccount :AccountManagement]
+
     static mapping = {
         id generator: 'increment'
         transactionId generator: 'uuid' // Optional: UUID for unique transactionId
