@@ -1,0 +1,75 @@
+                                                                         UPI Payment Processing 
+
+USER REGISTRATION
+MOBILE NUMBER
+ADDRESS
+PASSWORD(PIN)
+NAME: FIRST NAME,LAST NAME
+EMAIL
+Backed- end calls:Post = http://localhost:9090/user/register
+Front -end calls:http://localhost:9090/user/register
+I   have created a form to enter the details of user
+response=  axios.post('')
+Here we get details from producer to consumer using kafka when ever the user has been registered succesfully
+Here we will be having tomany relation with List of bank accounts
+USER LOG-IN
+MOBILE NUMBER
+PIN
+Back end calls:Post = http://localhost:9090/user/login
+I have used userContext so it  contains all the details of user when the user enter exact details it open or else it throws exception
+Both Mobile number and Pin from from registration has to be cross checked and if they verify they should log in to Account creation page or else navigate to user registation
+Here in the User Domain i ghave use tomany relation because one user has multiples accounts so for a accountDomain 
+ACCOUNT CREATION 
+LIST OF BANK ACCOUNTS
+ACCOUNT NUMBER
+PIN
+LIMIT OF TRANSACTIONS
+Back End Call :POST = http://localhost:9090/account/create
+After enetering the fileds we will be having a SAVE button if user clicks account will be created sucessfully 
+Here when the account is created sucessfully the message will be sent throught kafka 
+Here i have used belongs to beacuse the account belngs to one user and i have used toMany relation because on account undergoes multiple transactions.
+DEFAULT AMOUNT - 100000
+ACCOUNT DISPLAY
+BANK ACCOUNT
+BANK BALANCE
+NEW  UPI PIN
+Back end calls:Get = http://localhost:9090/account/userId/1
+Here i  have used userContext in the front End it contains all user and account Details so when the userLogged in his id falls and get his all account details like BankBalance .Here the user has set whether the account is primary or not
+Here after the log in we will get user bank account by user id and the the bank balance and generate UPI pin
+TRANSACTION - BUTTON
+UPI ID OR MOB NUM OF THE RECEIVER
+AMOUNT
+BANK ACCOUNT LIST COMES FROM ACCOUNT CREATION
+UPI PIN COMES FROM ACCOUNT DISPLAY WHERE THE USER ENTERED IN THAT
+Back end calls: Post =  http://localhost:8080/transaction/initiateTransfer
+Here i have integrated with Kafka beacouse there will many transaction going at ones so the user should know the status whether the transaction is sucess or failed so here we have huge .
+In the front end i have userContext it has all the details of the user and account so when use logged in it gives the account details of accounts the user has so when he wants to transfer he will enetr the receiver number amount and a user has multiple accounts so he has select the bank and has to enter the upiPin then transaction will be sucessful. When he recieves amount it will be debited in primary account
+After verfication of the pin the amount should be transferred and the limit should not be excceded
+TRANSACTION HISTORY - BUTTON
+FIELDS
+DATE
+TIME
+AMOUNT COMES FROM THE TRANSCATION
+RECEPIENT COMES FROM THE TRANSACTION
+Back end calls:http://localhost:9090/transaction/history/9990004441
+The transaction histrory comes throught his mobile Number
+Here we maintain belongsto relation for UserDomain because the sender and user and receiver will be from the userDomain and we have toMany relation for AccountDomain beacouse there will be many accounts sending and receving amount.
+GET LIST OF TRANSACTIONS
+In the front end the userContext all the details so when the user logged in and clicks the transaction history the  mobileNumber falls into and we get transaction history
+When the  user clicks the TRANSACTION HISTORY we should get list with the above fields
+Check Balance :
+Back End call : Get = http://localhost:9090/account/upiPin?upiPin=9876
+Here the user has to provide the upi Pin he enters and submit it gives the bankBalance
+SECURITY MEASURES
+We should take verfication of the Pin and Transaction limit
+USER PROFILE MANAGEMENT - BUTTON
+UPDATE THE ACCOUNT DETAILS
+SAME THE FIELDS OF USER REGISTRATION
+Back end calls:PUT = http://localhost:9090/user/3
+Here we have to provide userId and update details
+Front End:
+In this already userContext contains details of user and accounts when the user Logged in and clicks button to edi and makes necesa=sary chnages and updates the details;.
+
+
+
+ 
