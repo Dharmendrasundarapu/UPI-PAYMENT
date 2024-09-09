@@ -61,6 +61,23 @@ class AccountService {
             AccountModel.fromAccountManagement(userDetail)
         }
     }
+    @Transactional
+    def getBalance(int upiPin)
+    {
+        AccountManagement accountManagement=AccountManagement.findByUpiPin(upiPin)
+        if (!accountManagement)
+        {
+            return "No user "
+        }
+        else
+        {
+            AccountModel accountModel=new AccountModel()
+            accountModel.upiPin=accountManagement.upiPin
+            accountModel.bankBalance=accountManagement.bankBalance
+
+            return  accountModel
+        }
+    }
 
     @Transactional
     def setPrimaryAccount(Long accountId, Long userId) {

@@ -7,6 +7,7 @@ import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.PathVariable
 import io.micronaut.http.annotation.Post
+import io.micronaut.http.annotation.QueryValue
 
 import javax.inject.Inject
 
@@ -27,5 +28,10 @@ class AccountController {
     {
         return  accountService.getByUserId(userId)
 
+    }
+    @Get("/upiPin")
+    def checkBalance(@QueryValue int upiPin)
+    {
+        return accountService.getBalance(upiPin)
     }
 }
