@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat
 class TransactionModel {
     String senderMobileNumber
     String receiverMobileNumber
+    String receiverName
     BigDecimal amount
     String upiPin
     String transactionId

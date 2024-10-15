@@ -22,6 +22,7 @@ class TransactionService {
         UserManagement sender = UserManagement.findByPhoneNumber(senderMobileNumber)
         UserManagement receiver = UserManagement.findByPhoneNumber(receiverMobileNumber)
 
+
         if (!sender || !receiver) {
             return "Sender or Receiver Not Found"
         }
@@ -81,6 +82,7 @@ class TransactionService {
                 amount: transaction.amount,
                 senderMobileNumber: senderMobileNumber,
                 receiverMobileNumber: receiverMobileNumber,
+                receiverName: receiver.lastName,
                 transactionDate: transaction.transactionDate,
                 status: transaction.status
         )
@@ -109,6 +111,7 @@ class TransactionService {
             new TransactionModel(
                     senderMobileNumber: transaction.sender.phoneNumber,
                     receiverMobileNumber: transaction.receiver?.phoneNumber,
+                    receiverName: transaction.receiver?.lastName,
                     amount: transaction.amount,
                     transactionId: transaction.transactionId,
                     transactionDate: formatter.format(new Date(transaction.transactionDate.time)), // Convert to formatted String
